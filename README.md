@@ -1,145 +1,75 @@
-<img src="./packages/ui/public/brand.svg" width="80" />
-
+[update-readmes]   Mode: rewrite — migrating to template structure...
 # diffity
 
-[![npm version](https://img.shields.io/npm/v/diffity)](https://www.npmjs.com/package/diffity)
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/diffity)
 
-Diffity is an agent-agnostic, GitHub-style diff viewer and code review tool.
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-```bash
-npm install -g diffity
-```
+## Architecture
 
-It works with Claude Code, Cursor, Codex, and any AI coding agent.
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-## See your diffs
+## Install
 
-Run `diffity` inside any git repo — your browser opens with a GitHub-style, syntax-highlighted diff.
-
-```bash
-# everyday use
-diffity                                    # review all uncommitted changes
-diffity HEAD~1                             # review your last commit
-diffity HEAD~3                             # review your last 3 commits
-
-# branch workflows
-diffity main                               # compare current branch against main
-diffity main..feature                      # compare feature branch against main
-diffity main feature                       # same as above, shorthand syntax
-diffity --base main --compare feature      # same as above, explicit flags
-
-# releases and tags
-diffity v1.0.0 v2.0.0                     # compare two releases
-diffity v1.0.0                             # what changed since v1.0.0
-
-# specific commits
-diffity abc1234                            # changes since a specific commit
-diffity abc1234..def5678                   # changes between two commits
-```
-
-The `--base`/`--compare` flags use the same terminology as GitHub PRs — base is what you're comparing against, compare is the branch with changes. You can also use range syntax (`main..feature`) or just pass two positional args (`diffity main feature`).
-
-You can leave comments on any diff — working tree changes, branch comparisons, commit ranges. Copy them into your agent with a button and ask it to resolve them, or use the skills below to let your agent auto-review and auto-solve them.
-
-## AI code review
-
-Install the skills for your coding agent (Claude Code, Cursor, Codex, etc.):
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
 ```bash
-npx skills add kamranahmedse/diffity
+git clone https://github.com/Interested-Deving-1896/diffity.git
+cd diffity
 ```
 
-Then use the slash commands:
+## Usage
 
-### `/diffity-diff`
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
 
-Opens the diff viewer in your browser. Accepts the same refs as the CLI, plus natural language:
+## Configuration
 
-```
-/diffity-diff                          # working tree changes
-/diffity-diff main                     # current branch against main
-/diffity-diff main..feature            # branch diff
-/diffity-diff HEAD~1                   # last commit
-/diffity-diff last 3 commits           # natural language works too
-```
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
 
-Leave comments on any line — when you're done, run `/diffity-resolve` to have your agent fix them.
+## CI
 
-### `/diffity-review`
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
 
-Your agent reviews the diff and leaves inline comments in the viewer. Uses severity tags (`[must-fix]`, `[suggestion]`, `[nit]`, `[question]`) so you can triage by importance. Supports refs, focus areas, and natural language:
+## Mirror chain
 
-```
-/diffity-review                             # review working tree changes
-/diffity-review main                        # review what you're merging into main
-/diffity-review main..feature               # review what you're merging into main
-/diffity-review identify security issues    # focus on security issues
-/diffity-review performance in src/lib      # focus on performance in specific dir
-/diffity-review last 3 commits              # natural language works too
-```
-
-### `/diffity-resolve`
-
-Reads all open comments and makes the requested code changes. Works with both your comments and AI review comments:
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/diffity`](https://github.com/Interested-Deving-1896/diffity) and mirrored through:
 
 ```
-/diffity-resolve                       # resolve all open comments
-/diffity-resolve abc123                # resolve a specific thread by ID
+Interested-Deving-1896/diffity  ──►  OpenOS-Project-OSP/diffity  ──►  OpenOS-Project-Ecosystem-OOC/diffity
 ```
 
-A typical workflow: run `/diffity-review` to get AI feedback, check the comments in the browser, then run `/diffity-resolve` to apply the fixes.
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-## GitHub PRs
+## Contributors
 
-Pass a GitHub PR URL to view and review pull requests locally:
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-```bash
-diffity https://github.com/owner/repo/pull/123
-```
+## Origins
 
-This checks out the PR, opens the diff against its base branch, and lets you leave comments in the viewer. Requires the [`gh` CLI](https://cli.github.com/) installed and authenticated (`gh auth login`), and the current repo must match the PR's repository.
+<!-- AI:start:origins -->
+_Original project — no upstream fork._
+<!-- AI:end:origins -->
 
-You can push your comments (including AI review comments) back to GitHub as PR review comments, and pull existing GitHub comments into the viewer. Both are available from the viewer UI.
+## Resources
 
-The skills work with PR URLs too:
-
-```
-/diffity-diff https://github.com/owner/repo/pull/123
-/diffity-review https://github.com/owner/repo/pull/123
-```
-
-## Multiple projects
-
-Diffity supports running multiple projects simultaneously. Each gets its own port automatically:
-
-```bash
-# Terminal 1 — starts on :5391
-cd ~/projects/app && diffity
-
-# Terminal 2 — starts on :5392
-cd ~/projects/api && diffity
-```
-
-If you run `diffity` in a repo that already has a running instance, it opens the existing one instead of starting a new server. Use `--new` to kill the existing instance and start fresh.
-
-```bash
-diffity list               # show all running instances
-diffity list --json        # machine-readable output
-```
-
-## Options
-
-```
---base <ref>       Base ref to compare from (e.g. main, HEAD~3, v1.0.0)
---compare <ref>    Ref to compare against base (default: working tree)
---port <port>      Custom port (default: auto-assigned from 5391)
---no-open          Don't open browser
---dark             Dark mode
---unified          Unified view (default: split)
---quiet            Minimal terminal output
---new              Stop existing instance and start fresh
-```
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
 
 ## License
 
-[PolyForm Shield 1.0.0](./LICENSE) © [Kamran Ahmed](https://x.com/kamrify)
+<!-- AI:start:license -->
+<!-- License not detected — add a LICENSE file to this repo. -->
+<!-- AI:end:license -->
